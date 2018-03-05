@@ -6,10 +6,12 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QTimer>
 
+class Pomodoro : public QWidget {
 
-class Pomodoro : public QWidget
-{
+    Q_OBJECT
+
 public:
     Pomodoro(QWidget *parent = 0);
 
@@ -20,6 +22,10 @@ private:
     QPushButton *resetButton;
     QLabel *timer;
 
+    // Other objects and variables
+    QTimer *counter;
+    int timeElapsed;
+
     //Layouts
     QHBoxLayout *buttonsLayout;
     QHBoxLayout *timerLayout;
@@ -27,9 +33,16 @@ private:
 
     // Methods
     void createLayout();
+    void initializeTimer();
+    void updateTimer();
+
+    QString getTime();
 
 private slots:
-    void startTimer();
+    void startPomodoro();
+    void stopPomodoro();
+    void resetPomodoro();
+    void secondPassed();
 };
 
 #endif // POMODORO_H
