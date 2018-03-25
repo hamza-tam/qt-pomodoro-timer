@@ -2,13 +2,30 @@
 
 // Constructor
 Pomodoro::Pomodoro(QWidget *parent) : QWidget(parent) {
-    timeElapsed = 0;
-
+    // Intialising some variables:
+    setVariables();
+    // Starting the app
     createLayout();
     initializeTimer();
 
+    // Events
+    connect(this, SIGNAL(sessionEnd()), this, SLOT(nextSession()));
+    connect(this, SIGNAL(sessionCountChanged()), this, SLOT(updateSessionCount()));
+    connect(this, SIGNAL(sessionTypeChanged()), this, SLOT(updateSessiontype()));
+
+
     setLayout(mainLayout);
     setWindowTitle("Pomodoro");
+}
+
+// Setting application variables
+void Pomodoro::setVariables() {
+    workSession  = true;
+    sessionCount = 0;
+    session      = 1;
+    rest         = 1;
+    timeElapsed  = 0;
+    stop         = session * 60;
 }
 
 // Creating Ui components
@@ -23,6 +40,9 @@ void Pomodoro::createLayout() {
     resetButton = new QPushButton("Reset");
     connect(resetButton, SIGNAL(clicked()), this, SLOT(resetPomodoro()));
 
+    applyButton = new QPushButton("Apply");
+    connect(applyButton, SIGNAL(clicked(bool)), this, SLOT(applyChanges()));
+
     // Creating the timer text
     timer = new QLabel;
     timer->setText(getTime());
@@ -30,20 +50,60 @@ void Pomodoro::createLayout() {
     font.setPointSize(22);
     timer->setFont(font);
 
+    // Creating info to display:
+    sessionType   = new QLabel("Session type : Work");
+    sessionNumber = new QLabel("Number of sessions : 0");
+
+    // Creating settings controls
+    sessionLabel = new QLabel("Session time");
+    restLabel    = new QLabel("Rest time");
+
+    sessionTime  = new QLineEdit(QString::number(session));
+    sessionTime->setAlignment(Qt::AlignRight);
+
+    restTime     = new QLineEdit(QString::number(rest));
+    restTime->setAlignment(Qt::AlignRight);
+
     // Creating layouts
+
+    // Creating button layout
     buttonsLayout = new QHBoxLayout;
     buttonsLayout->addWidget(startButton);
     buttonsLayout->addWidget(stopButton);
     buttonsLayout->addWidget(resetButton);
 
+    // Creating timer layout
     timerLayout = new QHBoxLayout;
     timerLayout->addStretch();
     timerLayout->addWidget(timer);
     timerLayout->addStretch();
 
+    // Creating the settings layout
+    settingsLayout = new QGridLayout();
+    settingsLayout->addWidget(sessionLabel, 1,1, Qt::AlignCenter);
+    settingsLayout->addWidget(sessionTime, 2,1, Qt::AlignCenter);
+    settingsLayout->addWidget(restLabel, 1,2, Qt::AlignCenter);
+    settingsLayout->addWidget(restTime, 2,2, Qt::AlignCenter);
+
+    // Creating apply settings layout
+    applyLayout = new QHBoxLayout();
+    applyLayout->addStretch();
+    applyLayout->addWidget(applyButton);
+
+
+    // Creating the info layout
+    infoLayout = new QVBoxLayout();
+    infoLayout->addWidget(sessionType);
+    infoLayout->addWidget(sessionNumber);
+
+    // Creating main layout
     mainLayout = new QVBoxLayout;
     mainLayout->addLayout(timerLayout);
     mainLayout->addLayout(buttonsLayout);
+    mainLayout->addLayout(infoLayout);
+    mainLayout->addSpacing(20);
+    mainLayout->addLayout(settingsLayout);
+    mainLayout->addLayout(applyLayout);
 }
 
 void Pomodoro::initializeTimer() {
@@ -57,6 +117,11 @@ void Pomodoro::secondPassed() {
 }
 
 void Pomodoro::updateTimer() {
+    // Checking if the session ended
+    if (timeElapsed >= stop) {
+        emit sessionEnd();
+    }
+
     timer->setText(getTime());
 }
 
@@ -70,6 +135,58 @@ void Pomodoro::stopPomodoro() {
 
 void Pomodoro::resetPomodoro() {
     timeElapsed = 0;
+    counter->stop();
+    counter->start(1000);
+    updateTimer();
+
+    sessionNumber = 0;
+    workSession = false;
+
+    emit sessionCountChanged();
+    emit sessionTypeChanged();
+}
+
+void Pomodoro::nextSession() {
+    timeElapsed = 0;
+
+    if (workSession) {
+        workSession = false;
+        stop = rest * 60;
+
+        emit sessionTypeChanged();
+    } else {
+        workSession = true;
+        stop = session * 60;
+        sessionCount++;
+
+        emit sessionCountChanged();
+        emit sessionTypeChanged();
+    }
+}
+
+void Pomodoro::updateSessionCount() {
+    sessionNumber->setText("Number of sessions : " + QString::number(sessionCount));
+}
+
+void Pomodoro::updateSessiontype() {
+    QString text;
+    if (workSession) text = "Work";
+    else text = "Rest";
+
+    sessionType->setText("Session Type : " + text);
+}
+
+void Pomodoro::applyChanges() {
+    counter->stop();
+
+    // TODO: check if data is valid
+
+    timeElapsed = 0;
+    session     = sessionTime->text().toInt();
+    rest        = restTime->text().toInt();
+    stop        = session * 60;
+
+    counter->start(1000);
     updateTimer();
 }
 
