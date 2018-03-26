@@ -115,10 +115,10 @@ void Pomodoro::createLayout() {
 
 void Pomodoro::createActions() {
     showAction = new QAction("Pomodoro");
-    connect(showAction, SIGNAL(triggered(bool)), this, SLOT(showNormal()));
+    connect(showAction, SIGNAL(triggered(bool)), this, SLOT(showResponse()));
 
     quitAction = new QAction("Quit");
-    connect(quitAction, SIGNAL(triggered(bool)), this, SLOT(close()));
+    connect(quitAction, SIGNAL(triggered(bool)), this, SLOT(quitResponse()));
 }
 
 void Pomodoro::createTrayIcon() {
@@ -203,6 +203,14 @@ void Pomodoro::nextSession() {
         emit sessionCountChanged();
         emit sessionTypeChanged();
     }
+}
+
+void Pomodoro::quitResponse() {
+    emit quitApp();
+}
+
+void Pomodoro::showResponse() {
+    emit showApp();
 }
 
 void Pomodoro::updateSessionCount() {

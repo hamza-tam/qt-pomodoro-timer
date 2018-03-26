@@ -2,16 +2,19 @@ TEMPLATE = app
 
 QT += core
 QT += widgets
-QT += qml
 
 #CONFIG += console
 
 HEADERS += \
     pomodoro.h \
-    default.h
+    default.h \
+    window.h \
+    settings.h
 
 SOURCES += \
     main.cpp \
-    pomodoro.cpp
+    pomodoro.cpp \
+    window.cpp \
+    settings.cpp
 
 DISTFILES +=

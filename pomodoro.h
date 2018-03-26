@@ -13,7 +13,6 @@
 #include <QSystemTrayIcon>
 #include <QMenu>
 #include <QAction>
-#include <QtQml>
 
 #include "default.h"
 
@@ -99,10 +98,15 @@ private slots:
     void updateSessiontype();
     void applyChanges();
 
+    void quitResponse();
+    void showResponse();
+
 signals:
     void sessionEnd();
     void sessionCountChanged();
     void sessionTypeChanged();
+    void quitApp();
+    void showApp();
 };
 
 #endif // POMODORO_H
