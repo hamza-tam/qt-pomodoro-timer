@@ -8,6 +8,11 @@ Pomodoro::Pomodoro(QWidget *parent) : QWidget(parent) {
     createLayout();
     initializeTimer();
 
+    createActions();
+
+    createTrayIcon();
+
+
     // Events
     connect(this, SIGNAL(sessionEnd()), this, SLOT(nextSession()));
     connect(this, SIGNAL(sessionCountChanged()), this, SLOT(updateSessionCount()));
@@ -16,6 +21,8 @@ Pomodoro::Pomodoro(QWidget *parent) : QWidget(parent) {
 
     setLayout(mainLayout);
     setWindowTitle("Pomodoro");
+
+    sysIcon->show();
 }
 
 // Setting application variables
@@ -106,6 +113,32 @@ void Pomodoro::createLayout() {
     mainLayout->addLayout(applyLayout);
 }
 
+void Pomodoro::createActions() {
+    showAction = new QAction("Pomodoro");
+    connect(showAction, SIGNAL(triggered(bool)), this, SLOT(showNormal()));
+
+    quitAction = new QAction("Quit");
+    connect(quitAction, SIGNAL(triggered(bool)), this, SLOT(close()));
+}
+
+void Pomodoro::createTrayIcon() {
+    sysIconMenu = new QMenu();
+
+    sysIconMenu->addAction(showAction);
+    sysIconMenu->addAction(quitAction);
+
+    sysIcon = new QSystemTrayIcon(this);
+    sysIcon->setContextMenu(sysIconMenu);
+}
+
+void Pomodoro::workStartMessage() {
+    sysIcon->showMessage("Pomodoro", "Work session");
+}
+
+void Pomodoro::restStartMessage() {
+    sysIcon->showMessage("Pomodoro", "Rest session");
+}
+
 void Pomodoro::initializeTimer() {
     counter = new QTimer;
     connect(counter, SIGNAL(timeout()), this, SLOT(secondPassed()));
@@ -127,10 +160,14 @@ void Pomodoro::updateTimer() {
 
 void Pomodoro::startPomodoro() {
     counter->start(1000);
+
+    sysIcon->showMessage("Pomodoro", "Pomodoro Starting");
 }
 
 void Pomodoro::stopPomodoro() {
     counter->stop();
+
+    sysIcon->showMessage("Pomodoro", "Pomodoro Stopped");
 }
 
 void Pomodoro::resetPomodoro() {
@@ -139,8 +176,8 @@ void Pomodoro::resetPomodoro() {
     counter->start(1000);
     updateTimer();
 
-    sessionNumber = 0;
-    workSession = false;
+    sessionCount = 0;
+    workSession = true;
 
     emit sessionCountChanged();
     emit sessionTypeChanged();
@@ -153,11 +190,15 @@ void Pomodoro::nextSession() {
         workSession = false;
         stop = rest * 60;
 
+        restStartMessage();
+
         emit sessionTypeChanged();
     } else {
         workSession = true;
         stop = session * 60;
         sessionCount++;
+
+        workStartMessage();
 
         emit sessionCountChanged();
         emit sessionTypeChanged();

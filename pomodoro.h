@@ -9,6 +9,13 @@
 #include <QTimer>
 #include <QLineEdit>
 #include <QGridLayout>
+#include <QGroupBox>
+#include <QSystemTrayIcon>
+#include <QMenu>
+#include <QAction>
+#include <QtQml>
+
+#include "default.h"
 
 class Pomodoro : public QWidget {
 
@@ -46,6 +53,10 @@ private:
     // Other objects and variables
     QTimer *counter;
 
+    // Groups
+    QGroupBox   *settingsGroup;
+    QVBoxLayout *settingsGroupLayout;
+
     //Layouts
     QHBoxLayout *buttonsLayout;
     QHBoxLayout *timerLayout;
@@ -54,11 +65,26 @@ private:
     QVBoxLayout *infoLayout;
     QHBoxLayout *applyLayout;
 
+    // System tray
+    QSystemTrayIcon *sysIcon;
+    QMenu       *sysIconMenu;
+
+    // Actions on the app
+    QAction     *showAction;
+    QAction     *quitAction;
+
+
     // Methods
     void createLayout();
     void initializeTimer();
     void updateTimer();
     void setVariables();
+    void createTrayIcon();
+    void createActions();
+
+    // Tray Methods
+    void workStartMessage();
+    void restStartMessage();
 
     QString getTime();
 
