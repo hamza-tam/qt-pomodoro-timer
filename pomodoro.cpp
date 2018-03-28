@@ -127,6 +127,11 @@ void Pomodoro::createTrayIcon() {
     sysIcon->setContextMenu(sysIconMenu);
 
     sysIcon->setToolTip(getTime());
+
+    QPixmap pixmap("timer.png");
+    pixmap.scaledToHeight(10);
+    QIcon icon(pixmap);
+    sysIcon->setIcon(icon);
 }
 
 void Pomodoro::workStartMessage() {
