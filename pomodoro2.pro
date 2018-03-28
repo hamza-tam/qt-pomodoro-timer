@@ -9,12 +9,14 @@ HEADERS += \
     pomodoro.h \
     default.h \
     window.h \
-    settings.h
+    settings.h \
+    about.h
 
 SOURCES += \
     main.cpp \
     pomodoro.cpp \
     window.cpp \
-    settings.cpp
+    settings.cpp \
+    about.cpp
 
 DISTFILES +=

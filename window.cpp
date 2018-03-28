@@ -1,6 +1,6 @@
 #include "window.h"
 
-Window::Window(QObject *parent) : QMainWindow()
+Window::Window(QWidget *parent) : QMainWindow(parent)
 {
     // Adding the pomodoro
     pomodoro = new Pomodoro;
@@ -31,7 +31,7 @@ void Window::createActions()
     connect(settingsAction, SIGNAL(triggered(bool)), pomodoro, SLOT(openSettings()));
 
     aboutAction = new QAction(tr("About"));
-    // connect ?
+    connect(aboutAction, SIGNAL(triggered(bool)), pomodoro, SLOT(openAbout()));
 }
 
 void Window::createMenus()

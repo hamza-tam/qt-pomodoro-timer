@@ -16,6 +16,7 @@
 
 #include "default.h"
 #include "settings.h"
+#include "about.h"
 
 class Pomodoro : public QWidget {
 
@@ -64,6 +65,7 @@ private:
     QAction     *quitAction;
 
     Settings    *settings;
+    About       *about;
 
 
     // Methods
@@ -99,6 +101,7 @@ private slots:
     void showResponse();
 
     void openSettings();
+    void openAbout();
 
 signals:
     void sessionEnd();

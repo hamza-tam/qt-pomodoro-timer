@@ -1,13 +1,14 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#include <QWidget>
 #include <QMainWindow>
 #include <QMenuBar>
 #include <QMenu>
 #include <QAction>
 
 #include "pomodoro.h"
-#include "settings.h"
+
 
 class Window : public QMainWindow
 {
@@ -27,7 +28,7 @@ private:
     QAction *aboutAction;
 
 public:
-    Window(QObject *parent = 0);
+    Window(QWidget *parent = 0);
 
     // Methods
     void createActions();

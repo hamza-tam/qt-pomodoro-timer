@@ -1,11 +1,29 @@
 #ifndef ABOUT_H
 #define ABOUT_H
 
+#include <QWidget>
+#include <QLabel>
+#include <QPushButton>
+#include <QVBoxLayout>
 
-class about
-{
+
+class About : public QWidget
+{    
 public:
-    about();
+    About(QWidget *parent = 0);
+
+private:
+    QLabel          *softName;
+    QLabel          *aboutText;
+
+    QPushButton     *button;
+
+    QVBoxLayout     *layout;
+
+
+    // Methods
+    void initComponents();
+    void initText();
 };
 
 #endif // ABOUT_H

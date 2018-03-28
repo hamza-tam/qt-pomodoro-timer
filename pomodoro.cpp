@@ -29,8 +29,8 @@ Pomodoro::Pomodoro(QWidget *parent) : QWidget(parent) {
 void Pomodoro::setVariables() {
     workSession  = true;
     sessionCount = 0;
-    session      = 1;
-    rest         = 1;
+    session      = WORK;
+    rest         = REST;
     timeElapsed  = 60 * session;
     stop         = session * 60;
 }
@@ -240,6 +240,12 @@ void Pomodoro::openSettings() {
     settings->show();
 
     connect(settings, SIGNAL(settingsChanged()), this, SLOT(resetPomodoro()));
+}
+
+void Pomodoro::openAbout()
+{
+    about = new About();
+    about->show();
 }
 
 // Formating time string
