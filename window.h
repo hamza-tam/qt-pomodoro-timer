@@ -7,10 +7,16 @@
 #include <QAction>
 
 #include "pomodoro.h"
+#include "settings.h"
 
 class Window : public QMainWindow
 {
+    Q_OBJECT
+
 private:
+    // Pomodoro
+    Pomodoro *pomodoro;
+
     // Menu
     QMenu   *fileMenu;
     QMenu   *aboutMenu;
@@ -26,10 +32,6 @@ public:
     // Methods
     void createActions();
     void createMenus();
-
-private slots:
-    void openSettings();
-
 };
 
 #endif // WINDOW_H

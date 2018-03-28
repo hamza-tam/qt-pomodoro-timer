@@ -15,6 +15,7 @@
 #include <QAction>
 
 #include "default.h"
+#include "settings.h"
 
 class Pomodoro : public QWidget {
 
@@ -40,14 +41,6 @@ private:
     QLabel      *timer;
 
     QLabel      *sessionType;
-    QLabel      *sessionNumber;
-
-    QLabel      *sessionLabel;
-    QLabel      *restLabel;
-    QLineEdit   *sessionTime;
-    QLineEdit   *restTime;
-
-    QPushButton *applyButton;
 
     // Other objects and variables
     QTimer *counter;
@@ -59,10 +52,8 @@ private:
     //Layouts
     QHBoxLayout *buttonsLayout;
     QHBoxLayout *timerLayout;
-    QGridLayout *settingsLayout;
     QVBoxLayout *mainLayout;
     QVBoxLayout *infoLayout;
-    QHBoxLayout *applyLayout;
 
     // System tray
     QSystemTrayIcon *sysIcon;
@@ -71,6 +62,8 @@ private:
     // Actions on the app
     QAction     *showAction;
     QAction     *quitAction;
+
+    Settings    *settings;
 
 
     // Methods
@@ -87,6 +80,11 @@ private:
 
     QString getTime();
 
+public:
+    // Getters
+    int* getSessionPointer();
+    int* getRestPointer();
+
 private slots:
     void startPomodoro();
     void stopPomodoro();
@@ -94,16 +92,16 @@ private slots:
     void secondPassed();
 
     void nextSession();
-    void updateSessionCount();
     void updateSessiontype();
     void applyChanges();
 
     void quitResponse();
     void showResponse();
 
+    void openSettings();
+
 signals:
     void sessionEnd();
-    void sessionCountChanged();
     void sessionTypeChanged();
     void quitApp();
     void showApp();

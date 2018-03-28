@@ -3,7 +3,7 @@
 Window::Window(QObject *parent) : QMainWindow()
 {
     // Adding the pomodoro
-    Pomodoro *pomodoro = new Pomodoro;
+    pomodoro = new Pomodoro;
     this->setCentralWidget(pomodoro);
 
     // adding menus
@@ -25,7 +25,7 @@ void Window::createActions()
     connect(quitAction, SIGNAL(triggered(bool)), this, SLOT(close()));
 
     settingsAction = new QAction(tr("Settings"));
-    connect(settingsAction, SIGNAL(triggered(bool)), this, SLOT(openSettings()));
+    connect(settingsAction, SIGNAL(triggered(bool)), pomodoro, SLOT(openSettings()));
 
     aboutAction = new QAction(tr("About"));
     // connect ?
@@ -40,11 +40,4 @@ void Window::createMenus()
 
     aboutMenu = new QMenu("About");
     aboutMenu->addAction(aboutAction);
-}
-
-// SLOTS
-
-void Window::openSettings()
-{
-
 }

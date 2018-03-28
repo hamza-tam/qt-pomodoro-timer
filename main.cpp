@@ -8,11 +8,8 @@ int main(int argc, char** argv) {
 
     QApplication app(argc, argv);
 
-    int a;
-    int b;
-
-    //Window window;
-    Settings window;
+    Window window;
+    //Settings window;
     window.show();
 
     return app.exec();

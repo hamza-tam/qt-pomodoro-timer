@@ -10,9 +10,16 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
+#include "default.h"
+
 class Settings : public QWidget
 {
     Q_OBJECT
+
+private:
+    // Variables
+    int *session;
+    int *rest;
 
 public:
     Settings(QWidget *parent = 0);
@@ -41,6 +48,17 @@ private:
     void createLabels();
     void createLineEdits();
     void createLayouts();
+
+public:
+    // Setters
+    void setVariables(int *current_session, int *current_rest);
+
+private slots:
+    void resetClicked();
+    void applyClicked();
+
+signals:
+    void settingsChanged();
 };
 
 #endif // SETTINGS_H
