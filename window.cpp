@@ -12,6 +12,9 @@ Window::Window(QObject *parent) : QMainWindow()
     menuBar()->addMenu(fileMenu);
     menuBar()->addMenu(aboutMenu);
 
+    menuBar()->setStyleSheet("color: #fff");
+
+    setStyleSheet("background-color: #130f40");
     setWindowTitle("Pomodoro");
 
     // Events

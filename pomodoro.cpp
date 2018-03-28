@@ -18,9 +18,9 @@ Pomodoro::Pomodoro(QWidget *parent) : QWidget(parent) {
     connect(this, SIGNAL(sessionCountChanged()), this, SLOT(updateSessionCount()));
     connect(this, SIGNAL(sessionTypeChanged()), this, SLOT(updateSessiontype()));
 
-
     setLayout(mainLayout);
     setWindowTitle("Pomodoro");
+    setFixedHeight(350);
 
     sysIcon->show();
 }
@@ -38,32 +38,55 @@ void Pomodoro::setVariables() {
 // Creating Ui components
 void Pomodoro::createLayout() {
     // Creating buttons
-    startButton = new QPushButton("Start");
+    startButton = new QPushButton();
     connect(startButton, SIGNAL(clicked()), this, SLOT(startPomodoro()));
+    startButton->setStyleSheet("border: none; color: #fff");
+    QPixmap pixmap("play.png");
+    QIcon ButtonIcon(pixmap);
+    startButton->setIcon(ButtonIcon);
+    startButton->setIconSize(pixmap.rect().size());
 
-    stopButton = new QPushButton("Stop");
+    stopButton = new QPushButton();
     connect(stopButton, SIGNAL(clicked()), this, SLOT(stopPomodoro()));
+    stopButton->setStyleSheet("border: none; color: #fff");
+    QPixmap stopPixmap("stop.png");
+    QIcon stopIcon(stopPixmap);
+    stopButton->setIcon(stopIcon);
+    stopButton->setIconSize(stopPixmap.rect().size());
 
-    resetButton = new QPushButton("Reset");
+    resetButton = new QPushButton();
     connect(resetButton, SIGNAL(clicked()), this, SLOT(resetPomodoro()));
+    resetButton->setStyleSheet("border: none; color: #fff");
+    QPixmap resetPixmap("reset.png");
+    QIcon resetIcon(resetPixmap);
+    resetButton->setIcon(resetIcon);
+    resetButton->setIconSize(resetPixmap.rect().size());
 
     // Creating the timer text
     timer = new QLabel;
     timer->setText(getTime());
     QFont font;
-    font.setPointSize(22);
+    font.setPointSize(65);
+    font.setBold(true);
     timer->setFont(font);
 
-    // Creating info to display:
-    sessionType   = new QLabel("Session type : Work");
+    timer->setStyleSheet("color: #fff");
 
+    // Creating info to display:
+    sessionType   = new QLabel("Work");
+    sessionType->setAlignment(Qt::AlignCenter);
+
+    font.setPointSize(20);
+    sessionType->setFont(font);
+
+    sessionType->setStyleSheet("color: #fff;");
 
     // Creating layouts
 
     // Creating button layout
     buttonsLayout = new QHBoxLayout;
-    buttonsLayout->addWidget(startButton);
     buttonsLayout->addWidget(stopButton);
+    buttonsLayout->addWidget(startButton);
     buttonsLayout->addWidget(resetButton);
 
     // Creating timer layout
@@ -78,9 +101,12 @@ void Pomodoro::createLayout() {
 
     // Creating main layout
     mainLayout = new QVBoxLayout;
-    mainLayout->addLayout(timerLayout);
-    mainLayout->addLayout(buttonsLayout);
+    mainLayout->addStretch();
     mainLayout->addLayout(infoLayout);
+    mainLayout->addLayout(timerLayout);
+    mainLayout->addStretch();
+    mainLayout->addLayout(buttonsLayout);
+    mainLayout->addSpacing(20);
 }
 
 void Pomodoro::createActions() {
@@ -99,6 +125,8 @@ void Pomodoro::createTrayIcon() {
 
     sysIcon = new QSystemTrayIcon(this);
     sysIcon->setContextMenu(sysIconMenu);
+
+    sysIcon->setToolTip(getTime());
 }
 
 void Pomodoro::workStartMessage() {
@@ -131,7 +159,7 @@ void Pomodoro::updateTimer() {
 void Pomodoro::startPomodoro() {
     counter->start(1000);
 
-    sysIcon->showMessage("Pomodoro", "Pomodoro Starting");
+    sysIcon->showMessage("Pomodoro", "Pomodoro Started");
 }
 
 void Pomodoro::stopPomodoro() {
@@ -183,7 +211,7 @@ void Pomodoro::updateSessiontype() {
     if (workSession) text = "Work";
     else text = "Rest";
 
-    sessionType->setText("Session type : " + text);
+    sessionType->setText(text);
 }
 
 void Pomodoro::applyChanges() {
@@ -227,5 +255,5 @@ QString Pomodoro::getTime() {
     if (min < 10) min_string = "0" + QString::number(min);
     else min_string = QString::number(min);
 
-    return min_string + " : " + sec_string;
+    return min_string + ":" + sec_string;
 }
