@@ -13,6 +13,7 @@
 #include <QSystemTrayIcon>
 #include <QMenu>
 #include <QAction>
+#include <QResource>
 
 #include "default.h"
 #include "settings.h"

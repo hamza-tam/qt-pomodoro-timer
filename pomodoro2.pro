@@ -20,3 +20,6 @@ SOURCES += \
     about.cpp
 
 DISTFILES +=
+
+RESOURCES += \
+    icons.qrc

@@ -2,6 +2,8 @@
 
 // Constructor
 Pomodoro::Pomodoro(QWidget *parent) : QWidget(parent) {
+    QResource::registerResource("/path/to/myresource.rcc");
+
     // Intialising some variables:
     setVariables();
     // Starting the app
@@ -15,7 +17,6 @@ Pomodoro::Pomodoro(QWidget *parent) : QWidget(parent) {
 
     // Events
     connect(this, SIGNAL(sessionEnd()), this, SLOT(nextSession()));
-    connect(this, SIGNAL(sessionCountChanged()), this, SLOT(updateSessionCount()));
     connect(this, SIGNAL(sessionTypeChanged()), this, SLOT(updateSessiontype()));
 
     setLayout(mainLayout);
@@ -41,7 +42,7 @@ void Pomodoro::createLayout() {
     startButton = new QPushButton();
     connect(startButton, SIGNAL(clicked()), this, SLOT(startPomodoro()));
     startButton->setStyleSheet("border: none; color: #fff");
-    QPixmap pixmap("play.png");
+    QPixmap pixmap(":/icons/play.png");
     QIcon ButtonIcon(pixmap);
     startButton->setIcon(ButtonIcon);
     startButton->setIconSize(pixmap.rect().size());
@@ -49,7 +50,7 @@ void Pomodoro::createLayout() {
     stopButton = new QPushButton();
     connect(stopButton, SIGNAL(clicked()), this, SLOT(stopPomodoro()));
     stopButton->setStyleSheet("border: none; color: #fff");
-    QPixmap stopPixmap("stop.png");
+    QPixmap stopPixmap(":/icons/stop.png");
     QIcon stopIcon(stopPixmap);
     stopButton->setIcon(stopIcon);
     stopButton->setIconSize(stopPixmap.rect().size());
@@ -57,7 +58,7 @@ void Pomodoro::createLayout() {
     resetButton = new QPushButton();
     connect(resetButton, SIGNAL(clicked()), this, SLOT(resetPomodoro()));
     resetButton->setStyleSheet("border: none; color: #fff");
-    QPixmap resetPixmap("reset.png");
+    QPixmap resetPixmap(":/icons/reset.png");
     QIcon resetIcon(resetPixmap);
     resetButton->setIcon(resetIcon);
     resetButton->setIconSize(resetPixmap.rect().size());
@@ -128,8 +129,7 @@ void Pomodoro::createTrayIcon() {
 
     sysIcon->setToolTip(getTime());
 
-    QPixmap pixmap("timer.png");
-    pixmap.scaledToHeight(10);
+    QPixmap pixmap(":/icons/timer.png");
     QIcon icon(pixmap);
     sysIcon->setIcon(icon);
 }
